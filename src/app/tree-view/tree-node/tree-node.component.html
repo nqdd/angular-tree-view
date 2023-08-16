@@ -1,5 +1,5 @@
 <div class="tree-node">
-  <div class="d-flex-center gap-md">
+  <div class="tree-node-item d-flex-center gap-md" cdkDrag>
     <div class="tree-node-label d-flex-center gap-sm">
       {{ node?.name }}
     </div>
@@ -12,7 +12,8 @@
   <ng-container *ngIf="node?.children?.length > 0">
     <div class="tree-node-child" style="margin-left: 20px">
       <app-tree-node
-        *ngFor="let childNode of node?.children"
+        [ngClass]="{'last-child': last}"
+        *ngFor="let childNode of node?.children; let last = last"
         [node]="childNode"
       ></app-tree-node>
     </div>

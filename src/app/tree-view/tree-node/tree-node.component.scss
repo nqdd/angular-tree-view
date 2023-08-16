@@ -1,4 +1,19 @@
 .tree-node {
+  &-item {
+    background-color: #fff;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      width: 10%;
+      height: 70%;
+      top: 100%;
+      border: 1px solid;
+      left: 10px;
+      border-width: 0 0 1px 1px;
+    }
+  }
+
   margin-bottom: 8px;
   &-label {
     min-width: 300px;
@@ -12,4 +27,8 @@
     margin-left: 20px;
     margin-top: 8px;
   }
+}
+
+.last-child .tree-node-item::before{
+  display: none;
 }

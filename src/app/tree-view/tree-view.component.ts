@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Pipe({
   name: 'hierarchy',
-  pure: false
+  pure: false,
 })
 export class HierarchyPipe implements PipeTransform {
   transform(value: any, ...args: any[]) {
@@ -10,7 +11,6 @@ export class HierarchyPipe implements PipeTransform {
     return this.transformToHierarchy(value);
   }
 
-  
   private transformToHierarchy(items: Array<any>) {
     const map: Record<string, any> = {};
     const result = [] as typeof items;
@@ -29,7 +29,6 @@ export class HierarchyPipe implements PipeTransform {
 
     return result;
   }
-  
 }
 
 @Component({
@@ -38,28 +37,9 @@ export class HierarchyPipe implements PipeTransform {
   styleUrls: ['./tree-view.component.scss'],
 })
 export class TreeViewComponent implements OnInit {
-  treeData = [
-    {
-      id: 1,
-      name: 'Node 1',
-      children: [
-        { id: 2, name: 'Node 1.1', children: [{ id: 22, name: 'node 1.2' }] },
-        { id: 3, name: 'Node 1.2' },
-      ],
-    },
-    {
-      id: 4,
-      name: 'Node 2',
-    },
-  ];
-
-  @Input() dataStructure: 'plain' | 'tree' = 'plain';
-
   _dataSource: Array<any> = [];
   @Input() set dataSource(value: Array<any>) {
-
-      this._dataSource = value;
-
+    this._dataSource = value;
   }
 
   constructor() {}
@@ -70,22 +50,7 @@ export class TreeViewComponent implements OnInit {
     this._dataSource.push(node);
   }
 
-  private transformToHierarchy(items: Array<any>) {
-    const map: Record<string, any> = {};
-    const result = [] as typeof items;
-
-    items.forEach((item) => {
-      item.children = [];
-      map[item.id] = item;
-      const parentId = item.parentId || null;
-
-      if (!map[parentId]) {
-        result.push(item);
-      } else {
-        map[parentId].children.push(item);
-      }
-    });
-
-    return result;
+  drop(event: CdkDragDrop<Array<any>>) {
+    moveItemInArray(this._dataSource, event.previousIndex, event.currentIndex);
   }
 }

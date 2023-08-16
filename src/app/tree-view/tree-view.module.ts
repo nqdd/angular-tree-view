@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HierarchyPipe, TreeViewComponent } from './tree-view.component';
 import { TreeNodeComponent } from './tree-node/tree-node.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
   imports: [
     CommonModule,
     NzRadioModule,
-    FormsModule
+    FormsModule,
+    DragDropModule
   ],
   exports: [
     TreeViewComponent
