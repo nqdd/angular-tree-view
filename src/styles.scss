@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("assets/normalize.scss");
+.d-flex {
+  display: flex;
+  &-center {
+    @extend .d-flex;
+    align-items: center;
+  }
+}
+
+.gap-sm {
+  gap: 4px;
+}
+
+.gap-md {
+  gap: 8px;
+}
