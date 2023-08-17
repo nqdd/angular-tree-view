@@ -1,5 +1,10 @@
 <div class="container">
-  <app-tree-view [dataSource]="data"></app-tree-view>
-
-  <button (click)="addParentNode()">add parent node</button>
+  <div class="tree-view">
+    <app-tree-view [dataSource]="data"></app-tree-view>
+    <button (click)="addParentNode()">add parent node</button>
+  </div>
+  <div class="tree-view">
+    <ant-tree-view>
+    </ant-tree-view>
+  </div>
 </div>

@@ -1,14 +1,15 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TreeNode } from './tree-node.interface';
 
 @Pipe({
   name: 'hierarchy',
   pure: false,
 })
 export class HierarchyPipe implements PipeTransform {
-  transform(value: any, ...args: any[]) {
-    console.log(args);
-    return this.transformToHierarchy(value);
+  transform(value: Array<any>) {
+    // return this.transformToHierarchy(value);
+    return value;
   }
 
   private transformToHierarchy(items: Array<any>) {
@@ -37,17 +38,58 @@ export class HierarchyPipe implements PipeTransform {
   styleUrls: ['./tree-view.component.scss'],
 })
 export class TreeViewComponent implements OnInit {
-  _dataSource: Array<any> = [];
-  @Input() set dataSource(value: Array<any>) {
-    this._dataSource = value;
+  private _dataSource: Array<TreeNode> = [];
+  get dataSource() {
+    return this._dataSource;
   }
+  @Input() set dataSource(value: Array<TreeNode>) {
+    this._dataSource = value;
+    this.defaultNodeId = this._dataSource[0]?.id;
+  }
+
+  defaultNodeId?: number;
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  public addNewNode(node: any) {
-    this._dataSource.push(node);
+  addNode(parentNode: any, childNode?: any) {
+    if (!childNode) {
+      this._dataSource.push(parentNode);
+    }
+
+    if (parentNode.id === childNode.parentId) {
+      if (!parentNode.children) parentNode.children = [];
+      parentNode.children.push(childNode);
+      return;
+    }
+
+    for (const child of parentNode.children) {
+      this.addNode(child, childNode);
+    }
+  }
+
+  removeNodeById(nodeId: any, source: Array<any>) {
+    console.log('remove node');
+    for (let index = 0; index < source.length; index++) {
+      const node = source[index];
+
+      if (node.id === nodeId) {
+        source.splice(index, 1);
+        return true;
+      }
+
+      if (node.children && node.children.length > 0) {
+        if (this.removeNodeById(nodeId, node.children)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  setDefaultNode(nodeId: number) {
+    this.defaultNodeId = nodeId;
   }
 
   drop(event: CdkDragDrop<Array<any>>) {
