@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TreeNode } from '../tree-node.interface';
 
 @Component({
   selector: 'app-tree-node',
@@ -7,7 +7,10 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./tree-node.component.scss'],
 })
 export class TreeNodeComponent implements OnInit {
-  @Input() node: any = null;
+  @Input() node!: TreeNode;
+
+  @Output() addNode = new EventEmitter<TreeNode>();
+  @Output() removeNode = new EventEmitter<number>();
 
   defaultNodeId: string | number | null = null;
 
@@ -15,7 +18,16 @@ export class TreeNodeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  defaultNodeChange(nodeId: typeof this.defaultNodeId) {
-    console.log(nodeId);
+  onRemoveNode(nodeId: number) {
+    this.removeNode.emit(nodeId);
+  }
+
+  onAddNode(node: TreeNode) {
+    this.addNode.emit(node);
+  }
+
+  setNodeDefault(e: Event) {
+    const target = e.target as HTMLInputElement;
+    console.log('default nodeId', target?.value);
   }
 }

@@ -1,21 +1,31 @@
 <div class="tree-node">
-  <div class="tree-node-item d-flex-center gap-md" cdkDrag>
-    <div class="tree-node-label d-flex-center gap-sm">
-      {{ node?.name }}
+  <div class="tree-node-item" cdkDrag>
+    <div class="tree-node--name">
+      <div>
+        {{ node.name }}
+      </div>
+      <button (click)="addNode.emit(node)">+</button>
+      <button (click)="onRemoveNode(node.id)">-</button>
     </div>
-    <div class="d-flex-center gap-sm">
+    <div class="tree-node--button">
+      <input
+        type="radio"
+        name="defaultNode"
+        (change)="setNodeDefault($event)"
+        [value]="node.id"
+      />
       <label for="defaultNode">Default</label>
-      <input type="radio" name="defaultNode" [value]="node.id" />
     </div>
   </div>
 
-  <ng-container *ngIf="node?.children?.length > 0">
-    <div class="tree-node-child" style="margin-left: 20px">
+  <ng-container *ngIf="node.children && node.children.length > 0">
+    <div class="tree-node-children">
       <app-tree-node
-        [ngClass]="{'last-child': last}"
         *ngFor="let childNode of node?.children; let last = last"
+        [ngClass]="{ 'last-child': last }"
         [node]="childNode"
-      ></app-tree-node>
+      >
+      </app-tree-node>
     </div>
   </ng-container>
 </div>

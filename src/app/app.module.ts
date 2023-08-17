@@ -11,6 +11,7 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AntTreeViewModule } from './nz-tree-view/nz-tree-view.module';
 
 registerLocaleData(en);
 
@@ -24,7 +25,8 @@ registerLocaleData(en);
     TreeViewModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AntTreeViewModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

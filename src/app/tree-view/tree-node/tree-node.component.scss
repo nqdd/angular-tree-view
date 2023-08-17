@@ -1,34 +1,67 @@
 .tree-node {
   &-item {
+
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 20px;
     background-color: #fff;
+  }
+
+  &--name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    margin-left: 12px;
+  }
+
+  &--button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.tree-node-children {
+  margin-left: 25px;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -18px;
+    height: 100%;
+    width: 1px;
+    border-left: 1px solid #D8DCDF;
+  }
+
+  .tree-node--name {
     position: relative;
     &::before {
       content: "";
       position: absolute;
-      width: 10%;
-      height: 70%;
-      top: 100%;
-      border: 1px solid;
-      left: 10px;
-      border-width: 0 0 1px 1px;
+      width: 12px;
+      height: 1px;
+      border-top: 1px solid #D8DCDF;
+      top: calc(50% + 3px);
+      left: -12px;
     }
-  }
-
-  margin-bottom: 8px;
-  &-label {
-    min-width: 300px;
-    width: max-content;
-    padding: 4px;
-    border: 1px solid #d3d3d3;
-    border-radius: 4px;
-  }
-
-  &-child {
-    margin-left: 20px;
-    margin-top: 8px;
   }
 }
 
-.last-child .tree-node-item::before{
-  display: none;
+.cdk-drag-preview {
+  background-color: red;
+}
+
+.cdk-drag-placeholder {
+  background-color: yellow;
+}
+
+.cdk-drop-list-receiving {
+  background-color: plum;
 }
