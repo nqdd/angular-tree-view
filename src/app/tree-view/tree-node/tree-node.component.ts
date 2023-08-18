@@ -1,5 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { TreeNode } from '../tree-node.interface';
+import { TreeViewComponent } from '../tree-view.component';
 
 @Component({
   selector: 'app-tree-node',
@@ -9,25 +17,28 @@ import { TreeNode } from '../tree-node.interface';
 export class TreeNodeComponent implements OnInit {
   @Input() node!: TreeNode;
 
-  @Output() addNode = new EventEmitter<TreeNode>();
-  @Output() removeNode = new EventEmitter<number>();
+  treeView: TreeViewComponent;
 
-  defaultNodeId: string | number | null = null;
-
-  constructor() {}
+  constructor(private _injector: Injector) {
+    this.treeView = this._injector.get<TreeViewComponent>(TreeViewComponent);
+  }
 
   ngOnInit(): void {}
 
   onRemoveNode(nodeId: number) {
-    this.removeNode.emit(nodeId);
+    this.treeView.removeNodeById(nodeId, this.treeView.dataSource);
   }
 
-  onAddNode(node: TreeNode) {
-    this.addNode.emit(node);
+  addChildNode(node: TreeNode) {
+    const newNode = {
+      id: node.id * 11,
+      name: 'new Node',
+      parentId: node.id,
+    };
+    this.treeView.addNode(node, newNode);
   }
 
-  setNodeDefault(e: Event) {
-    const target = e.target as HTMLInputElement;
-    console.log('default nodeId', target?.value);
+  setNodeDefault(nodeId: number) {
+    this.treeView.setDefaultNode(nodeId);
   }
 }

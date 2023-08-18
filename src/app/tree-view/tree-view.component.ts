@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TreeNode } from './tree-node.interface';
 
 @Pipe({
   name: 'hierarchy',
@@ -37,10 +38,16 @@ export class HierarchyPipe implements PipeTransform {
   styleUrls: ['./tree-view.component.scss'],
 })
 export class TreeViewComponent implements OnInit {
-  _dataSource: Array<any> = [];
-  @Input() set dataSource(value: Array<any>) {
-    this._dataSource = value;
+  private _dataSource: Array<TreeNode> = [];
+  get dataSource() {
+    return this._dataSource;
   }
+  @Input() set dataSource(value: Array<TreeNode>) {
+    this._dataSource = value;
+    this.defaultNodeId = this._dataSource[0]?.id;
+  }
+
+  defaultNodeId?: number;
 
   constructor() {}
 
@@ -52,6 +59,7 @@ export class TreeViewComponent implements OnInit {
     }
 
     if (parentNode.id === childNode.parentId) {
+      if (!parentNode.children) parentNode.children = [];
       parentNode.children.push(childNode);
       return;
     }
@@ -62,6 +70,7 @@ export class TreeViewComponent implements OnInit {
   }
 
   removeNodeById(nodeId: any, source: Array<any>) {
+    console.log('remove node');
     for (let index = 0; index < source.length; index++) {
       const node = source[index];
 
@@ -77,6 +86,10 @@ export class TreeViewComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  setDefaultNode(nodeId: number) {
+    this.defaultNodeId = nodeId;
   }
 
   drop(event: CdkDragDrop<Array<any>>) {

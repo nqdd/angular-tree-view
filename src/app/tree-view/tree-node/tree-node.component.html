@@ -1,17 +1,23 @@
 <div class="tree-node">
-  <div class="tree-node-item" cdkDrag>
-    <div class="tree-node--name">
+  <div class="tree-node-item">
+    <div class="tree-node--name" cdkDrag>
+      <!-- <div class="example-custom-placeholder" *cdkDragPlaceholder></div> -->
       <div>
         {{ node.name }}
       </div>
-      <button (click)="addNode.emit(node)">+</button>
+      <button (click)="addChildNode(node)">+</button>
       <button (click)="onRemoveNode(node.id)">-</button>
+      <button cdkDragHandle>drag</button>
     </div>
-    <div class="tree-node--button">
+    <div
+      class="tree-node--button"
+      [class.default-node]="node.id == treeView.defaultNodeId"
+    >
       <input
         type="radio"
         name="defaultNode"
-        (change)="setNodeDefault($event)"
+        (change)="setNodeDefault(node.id)"
+        [checked]="node.id == treeView.defaultNodeId"
         [value]="node.id"
       />
       <label for="defaultNode">Default</label>

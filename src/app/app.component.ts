@@ -51,30 +51,6 @@ export class AppComponent {
         },
       ],
     },
-    {
-      id: 112,
-      name: 'Node 1.1.2',
-      parentId: 11,
-      children: [],
-    },
-    {
-      id: 11,
-      name: 'Node 1.1',
-      parentId: 1,
-      children: [],
-    },
-    {
-      id: 1111,
-      name: 'Node 1.1.1.1',
-      parentId: 111,
-      children: [],
-    },
-    {
-      id: 1112,
-      name: 'Node 1.1.1.2',
-      parentId: 111,
-      children: [],
-    }
   ];
 
   public addParentNode() {

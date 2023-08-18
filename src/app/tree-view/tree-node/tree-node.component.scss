@@ -1,11 +1,11 @@
 .tree-node {
   &-item {
-
     display: flex;
     align-items: center;
     margin-bottom: 18px;
     gap: 20px;
     background-color: #fff;
+    
   }
 
   &--name {
@@ -21,10 +21,23 @@
   }
 
   &--button {
+    visibility: hidden;
     display: flex;
     align-items: center;
     gap: 8px;
+    input[name="defaultNode"] {
+      cursor: pointer;
+    }
   }
+
+  &-item:hover > &--button {
+    visibility: visible;
+  }
+
+  .tree-node--button.default-node {
+    visibility: visible;
+  }
+
 }
 
 .tree-node-children {
@@ -37,7 +50,7 @@
     top: -18px;
     height: 100%;
     width: 1px;
-    border-left: 1px solid #D8DCDF;
+    border-left: 1px solid #d8dcdf;
   }
 
   .tree-node--name {
@@ -47,7 +60,7 @@
       position: absolute;
       width: 12px;
       height: 1px;
-      border-top: 1px solid #D8DCDF;
+      border-top: 1px solid #d8dcdf;
       top: calc(50% + 3px);
       left: -12px;
     }
@@ -59,7 +72,16 @@
 }
 
 .cdk-drag-placeholder {
+  height: 30px;
   background-color: yellow;
+}
+
+.example-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  height: 10px;
+  width: 100%;
+  margin: 24px 0;
 }
 
 .cdk-drop-list-receiving {
