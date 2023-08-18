@@ -1,34 +1,46 @@
-import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { TreeNode } from './tree-node.interface';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Pipe,
+  PipeTransform,
+  Self,
+} from '@angular/core';
+import { TreeViewDataService } from './services/tree-view-data.service';
+import { TreviewDragDropSerivce } from './services/tree-view-drag-drop.service';
+import { TreeNode } from './tree-node/tree-node.interface';
 
 @Pipe({
-  name: 'hierarchy',
-  pure: false,
+  name: 'treeViewData',
+  pure: true
 })
-export class HierarchyPipe implements PipeTransform {
-  transform(value: Array<any>) {
-    // return this.transformToHierarchy(value);
-    return value;
+export class TreeViewDataPipe implements PipeTransform {
+  transform(value: Array<TreeNode>) {
+    return this.defineNodeLevel(value);
   }
 
-  private transformToHierarchy(items: Array<any>) {
-    const map: Record<string, any> = {};
-    const result = [] as typeof items;
+  private defineNodeLevel(nodes: Array<TreeNode>) {
+    let level = 1;
 
-    items.forEach((item) => {
-      item.children = [];
-      map[item.id] = item;
-      const parentId = item.parentId || null;
-
-      if (!map[parentId]) {
-        result.push(item);
-      } else {
-        map[parentId].children.push(item);
+    const define = (array: Array<TreeNode>) => {
+      for (const node of array) {
+        if (!node.parentId) {
+          level = 1;
+        }
+        node.level = level;
+        if (node.children?.length) {
+          level++;
+          define(node.children);
+        }
       }
-    });
+    };
 
-    return result;
+    define(nodes);
+    console.log(nodes);
+    return nodes;
   }
 }
 
@@ -36,63 +48,68 @@ export class HierarchyPipe implements PipeTransform {
   selector: 'app-tree-view',
   templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.scss'],
+  providers: [TreeViewDataService, TreviewDragDropSerivce],
 })
 export class TreeViewComponent implements OnInit {
   private _dataSource: Array<TreeNode> = [];
+
   get dataSource() {
     return this._dataSource;
   }
+
   @Input() set dataSource(value: Array<TreeNode>) {
     this._dataSource = value;
-    this.defaultNodeId = this._dataSource[0]?.id;
+    this.treeViewService.dataSource = value;
   }
 
-  defaultNodeId?: number;
+  private _defaultNodeId: number | null = null;
+  @Input() set defaultNodeId(value: number | null) {
+    this._defaultNodeId = value;
+  }
+  get defaultNodeId() {
+    return this._defaultNodeId;
+  }
 
-  constructor() {}
+  @Output() onAddNode = new EventEmitter();
+  @Output() onAddChildNode = new EventEmitter();
+  @Output() onRemoveNode = new EventEmitter();
+  @Output() onSetDefaultNode = new EventEmitter();
 
-  ngOnInit(): void {}
+  constructor(
+    @Self() private treeViewService: TreeViewDataService,
+    @Self() private treeviewDragDropService: TreviewDragDropSerivce
+  ) {}
 
-  addNode(parentNode: any, childNode?: any) {
-    if (!childNode) {
-      this._dataSource.push(parentNode);
-    }
-
-    if (parentNode.id === childNode.parentId) {
-      if (!parentNode.children) parentNode.children = [];
-      parentNode.children.push(childNode);
-      return;
-    }
-
-    for (const child of parentNode.children) {
-      this.addNode(child, childNode);
+  ngOnInit(): void {
+    if (!this.defaultNodeId && this._dataSource?.length) {
+      this.treeViewService.defaultNode = this._dataSource[0];
     }
   }
 
-  removeNodeById(nodeId: any, source: Array<any>) {
-    console.log('remove node');
-    for (let index = 0; index < source.length; index++) {
-      const node = source[index];
-
-      if (node.id === nodeId) {
-        source.splice(index, 1);
-        return true;
-      }
-
-      if (node.children && node.children.length > 0) {
-        if (this.removeNodeById(nodeId, node.children)) {
-          return true;
-        }
-      }
-    }
-    return false;
+  addNode(node: TreeNode) {
+    this.treeViewService.addNode(node);
+    this.onAddNode.emit(node);
   }
 
-  setDefaultNode(nodeId: number) {
-    this.defaultNodeId = nodeId;
+  addChildNode(parentNode: TreeNode, childNode: TreeNode) {
+    this.treeViewService.addNode(parentNode, childNode);
+    this.onAddNode.emit({
+      parentNode,
+      childNode,
+    });
+  }
+
+  removeNode(node: TreeNode) {
+    this.treeViewService.removeNodeById(node.id);
+    this.onSetDefaultNode.emit(node);
+  }
+
+  setDefaultNode(node: TreeNode) {
+    this.treeViewService.setDefaultNode(node);
+    this.onSetDefaultNode.emit(node);
   }
 
   drop(event: CdkDragDrop<Array<any>>) {
-    moveItemInArray(this._dataSource, event.previousIndex, event.currentIndex);
+    this.treeviewDragDropService.hanldeDrop(this._dataSource, event);
   }
 }

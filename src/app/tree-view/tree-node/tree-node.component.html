@@ -1,23 +1,25 @@
 <div class="tree-node">
   <div class="tree-node-item">
-    <div class="tree-node--name" cdkDrag>
-      <!-- <div class="example-custom-placeholder" *cdkDragPlaceholder></div> -->
+    <ng-container *ngFor="let _ of [].constructor(node?.level || 0)">
+      <div class="line-indent"></div>
+    </ng-container>
+    <div class="tree-node--name" cdkDrag (cdkDragMoved)="onDragMoved($event)">
       <div>
         {{ node.name }}
       </div>
       <button (click)="addChildNode(node)">+</button>
-      <button (click)="onRemoveNode(node.id)">-</button>
-      <button cdkDragHandle>drag</button>
+      <button (click)="removeNode(node)">-</button>
+      <button [draggable]="true" cdkDragHandle>drag</button>
+      <div class="drag-placeholder"></div>
     </div>
     <div
       class="tree-node--button"
-      [class.default-node]="node.id == treeView.defaultNodeId"
+      [class.default-node]="node.id == treeViewSerice.defaultNodeId"
     >
       <input
         type="radio"
-        name="defaultNode"
-        (change)="setNodeDefault(node.id)"
-        [checked]="node.id == treeView.defaultNodeId"
+        (change)="setNodeDefault(node)"
+        [checked]="node.id == treeViewSerice.defaultNodeId"
         [value]="node.id"
       />
       <label for="defaultNode">Default</label>
@@ -28,7 +30,6 @@
     <div class="tree-node-children">
       <app-tree-node
         *ngFor="let childNode of node?.children; let last = last"
-        [ngClass]="{ 'last-child': last }"
         [node]="childNode"
       >
       </app-tree-node>

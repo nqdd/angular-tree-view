@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TreeViewComponent } from './tree-view/tree-view.component';
-import { TreeNode } from './tree-view/tree-node.interface';
+import { TreeNode } from './tree-view/tree-node/tree-node.interface';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +14,51 @@ export class AppComponent {
   title = 'angular-tree-view';
 
   data: Array<TreeNode> = [
+    {
+      id: 111,
+      name: 'Node 1.1.1',
+      parentId: 11,
+      children: [
+        {
+          id: 1111,
+          name: 'Node 1.1.1.1',
+          parentId: 111,
+          children: [],
+        },
+        {
+          id: 1112,
+          name: 'Node 1.1.1.2',
+          parentId: 111,
+          children: [
+            {
+              id: 11121,
+              name: 'Node 1.1.1.2.1',
+              parentId: 1112
+            }
+          ],
+        },
+      ],
+    },
+    {
+      id: 1,
+      name: 'Node 1',
+      children: [
+        {
+          id: 11,
+          name: 'Node 1.1',
+          parentId: 1,
+          children: [],
+        },
+        {
+          id: 12,
+          name: 'Node 1.2',
+          parentId: 1,
+          children: [],
+        },
+      ],
+    },
+  ];
+    data1: Array<TreeNode> = [
     {
       id: 111,
       name: 'Node 1.1.1',
@@ -54,11 +99,14 @@ export class AppComponent {
   ];
 
   public addParentNode() {
-    const newId = (this.data[this.data.length - 1]?.id || 0) + 1;
+    const newId = (this.data[this.data.length - 1]?.id || 0) + 1234;
     this.treeViewRef?.addNode({
       id: newId,
-      name: `new Node ${newId}`
+      name: `Node ${newId}`
     })
-    console.log(this.data);
+  }
+
+  logger(value: unknown) {
+    console.log(value);
   }
 }

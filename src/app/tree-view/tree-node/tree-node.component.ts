@@ -1,13 +1,16 @@
+import { CdkDragMove } from '@angular/cdk/drag-drop';
 import {
   Component,
   EventEmitter,
-  Injector,
   Input,
   OnInit,
   Output,
+  SkipSelf
 } from '@angular/core';
-import { TreeNode } from '../tree-node.interface';
+import { TreeViewDataService } from '../services/tree-view-data.service';
+import { TreviewDragDropSerivce } from '../services/tree-view-drag-drop.service';
 import { TreeViewComponent } from '../tree-view.component';
+import { TreeNode } from './tree-node.interface';
 
 @Component({
   selector: 'app-tree-node',
@@ -17,28 +20,31 @@ import { TreeViewComponent } from '../tree-view.component';
 export class TreeNodeComponent implements OnInit {
   @Input() node!: TreeNode;
 
-  treeView: TreeViewComponent;
+  @Output() onAddChildNode = new EventEmitter();
+  @Output() onRemoveNode = new EventEmitter();
+  @Output() onSetDefaultNode = new EventEmitter();
 
-  constructor(private _injector: Injector) {
-    this.treeView = this._injector.get<TreeViewComponent>(TreeViewComponent);
-  }
+  constructor(
+    @SkipSelf() public treeViewSerice: TreeViewDataService,
+    @SkipSelf() private treeViewRef: TreeViewComponent,
+    @SkipSelf() private treeviewDragDropService: TreviewDragDropSerivce
+  ) {}
 
   ngOnInit(): void {}
 
-  onRemoveNode(nodeId: number) {
-    this.treeView.removeNodeById(nodeId, this.treeView.dataSource);
+  removeNode(node: TreeNode) {
+    this.treeViewRef.removeNode(node);
   }
 
   addChildNode(node: TreeNode) {
-    const newNode = {
-      id: node.id * 11,
-      name: 'new Node',
-      parentId: node.id,
-    };
-    this.treeView.addNode(node, newNode);
+    console.log(node);
   }
 
-  setNodeDefault(nodeId: number) {
-    this.treeView.setDefaultNode(nodeId);
+  setNodeDefault(node: TreeNode) {
+    this.treeViewRef.setDefaultNode(node);
+  }
+
+  onDragMoved(event: CdkDragMove<HTMLDivElement>) {
+    this.treeviewDragDropService.handleDragMoved(event);
   }
 }

@@ -1,5 +1,5 @@
 <div cdkDropList (cdkDropListDropped)="drop($event)">
-  <ng-container *ngFor="let node of dataSource">
+  <ng-container *ngFor="let node of dataSource | treeViewData">
     <app-tree-node
       [node]="node"
     ></app-tree-node>

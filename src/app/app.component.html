@@ -1,10 +1,20 @@
 <div class="container">
   <div class="tree-view">
-    <app-tree-view [dataSource]="data"></app-tree-view>
+    <app-tree-view
+      [dataSource]="data"
+      (onAddNode)="logger($event)"
+      (onRemoveNode)="logger($event)"
+      (onSetDefaultNode)="logger($event)"
+    ></app-tree-view>
     <button (click)="addParentNode()">add parent node</button>
   </div>
   <div class="tree-view">
-    <ant-tree-view>
-    </ant-tree-view>
+    <!-- <app-tree-view
+      [dataSource]="data1"
+      (onAddNode)="logger($event)"
+      (onRemoveNode)="logger($event)"
+      (onSetDefaultNode)="logger($event)"
+    ></app-tree-view> -->
+    <ant-tree-view></ant-tree-view>
   </div>
 </div>
