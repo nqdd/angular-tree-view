@@ -1,7 +1,7 @@
 import { CdkDragDrop, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { TreeNode } from '../tree-node/tree-node.interface';
+import { TreeNodeOptions } from '../tree-node/tree-node.interface';
 
 enum DropPosition {
   BEFORE = 'before',
@@ -10,7 +10,7 @@ enum DropPosition {
 }
 
 @Injectable()
-export class TreviewDragDropSerivce {
+export class DecisionTreeDragDropSerivce {
   private dropPosition: DropPosition = DropPosition.INSIDE;
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
@@ -54,15 +54,17 @@ export class TreviewDragDropSerivce {
   }
 
   hanldeDrop(
-    dataSource: Array<TreeNode>,
+    dataSource: Array<TreeNodeOptions>,
     event: CdkDragDrop<typeof dataSource>
   ) {
     this.clearDragInfo();
     console.log('drop position', this.dropPosition);
     switch (this.dropPosition) {
       case DropPosition.AFTER:
+        // implement
         break;
       case DropPosition.BEFORE:
+        // implement
         break;
       default:
         moveItemInArray(dataSource, event.previousIndex, event.currentIndex);

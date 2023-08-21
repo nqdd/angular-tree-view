@@ -1,11 +1,11 @@
 <div class="tree-node">
   <div class="tree-node-item">
     <ng-container *ngFor="let _ of [].constructor(node?.level || 0)">
-      <div class="line-indent"></div>
+      <div class="indent-block"></div>
     </ng-container>
-    <div class="tree-node--name" cdkDrag (cdkDragMoved)="onDragMoved($event)">
+    <div class="tree-node-name" cdkDrag (cdkDragMoved)="onDragMoved($event)">
       <div>
-        {{ node.name }}
+        {{ node.title }}
       </div>
       <button (click)="addChildNode(node)">+</button>
       <button (click)="removeNode(node)">-</button>
@@ -13,14 +13,14 @@
       <div class="drag-placeholder"></div>
     </div>
     <div
-      class="tree-node--button"
-      [class.default-node]="node.id == treeViewSerice.defaultNodeId"
+      class="tree-node-button"
+      [class.default-node]="node.key == treeViewSerice.defaultNodeId"
     >
       <input
         type="radio"
         (change)="setNodeDefault(node)"
-        [checked]="node.id == treeViewSerice.defaultNodeId"
-        [value]="node.id"
+        [checked]="node.key == treeViewSerice.defaultNodeId"
+        [value]="node.key"
       />
       <label for="defaultNode">Default</label>
     </div>
@@ -28,11 +28,11 @@
 
   <ng-container *ngIf="node.children && node.children.length > 0">
     <div class="tree-node-children">
-      <app-tree-node
+      <trudi-tree-node
         *ngFor="let childNode of node?.children; let last = last"
         [node]="childNode"
       >
-      </app-tree-node>
+      </trudi-tree-node>
     </div>
   </ng-container>
 </div>

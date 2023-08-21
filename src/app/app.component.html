@@ -1,11 +1,11 @@
 <div class="container">
   <div class="tree-view">
-    <app-tree-view
-      [dataSource]="data"
+    <trudi-decision-tree
+      [dataSource]="(data | async) || []"
       (onAddNode)="logger($event)"
       (onRemoveNode)="logger($event)"
       (onSetDefaultNode)="logger($event)"
-    ></app-tree-view>
+    ></trudi-decision-tree>
     <button (click)="addParentNode()">add parent node</button>
   </div>
   <div class="tree-view">

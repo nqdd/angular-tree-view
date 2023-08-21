@@ -1,4 +1,6 @@
 .tree-node {
+
+
   &-item {
     display: flex;
     align-items: center;
@@ -10,7 +12,7 @@
     height: 45px;
 
     &.drop-before-inside {
-      .tree-node--button {
+      .tree-node-button {
         visibility: hidden !important;
       }
     }
@@ -24,7 +26,7 @@
     }
   }
 
-  &--name {
+  &-name {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -35,6 +37,9 @@
     border-radius: 8px;
     margin-left: 12px;
     position: relative;
+    &.cdk-drag-preview {
+      background-color: #fff;
+    }
     > .drag-placeholder {
       position: absolute;
       display: block;
@@ -44,7 +49,7 @@
     }
   }
 
-  &--button {
+  &-button {
     visibility: hidden;
     display: flex;
     align-items: center;
@@ -54,20 +59,20 @@
     }
   }
 
-  &-item:hover > &--button {
+  &-item:hover > &-button {
     visibility: visible;
   }
 
-  .tree-node--button.default-node {
+  .tree-node-button.default-node {
     visibility: visible;
   }
 }
 
-.cdk-drag-preview {
-  background-color: red;
+.tree-node-children  {
+  margin-left: 20px;
 }
 
-.line-indent {
+.indent-block {
   &:nth-child(1) {
     display: none;
   }
@@ -86,7 +91,8 @@
   &::after {
     position: absolute;
     top: 50%;
-    width: 10px;
+    width: 30px;
+    right: -33px;
     height: 14px;
     border-bottom: 1px solid #d9d9d9;
     content: ' ';

@@ -7,40 +7,40 @@ import {
   Output,
   SkipSelf
 } from '@angular/core';
-import { TreeViewDataService } from '../services/tree-view-data.service';
-import { TreviewDragDropSerivce } from '../services/tree-view-drag-drop.service';
-import { TreeViewComponent } from '../tree-view.component';
-import { TreeNode } from './tree-node.interface';
+import { TrudiDecisionTreeComponent } from '../trudi-decision-tree.component';
+import { DecisionTreeDataService } from '../services/decision-tree-data.service';
+import { DecisionTreeDragDropSerivce } from '../services/decision-tree-drag-drop.service';
+import { TreeNodeOptions } from './tree-node.interface';
 
 @Component({
-  selector: 'app-tree-node',
+  selector: 'trudi-tree-node',
   templateUrl: './tree-node.component.html',
   styleUrls: ['./tree-node.component.scss'],
 })
 export class TreeNodeComponent implements OnInit {
-  @Input() node!: TreeNode;
+  @Input() node!: TreeNodeOptions;
 
   @Output() onAddChildNode = new EventEmitter();
   @Output() onRemoveNode = new EventEmitter();
   @Output() onSetDefaultNode = new EventEmitter();
 
   constructor(
-    @SkipSelf() public treeViewSerice: TreeViewDataService,
-    @SkipSelf() private treeViewRef: TreeViewComponent,
-    @SkipSelf() private treeviewDragDropService: TreviewDragDropSerivce
+    @SkipSelf() public treeViewSerice: DecisionTreeDataService,
+    @SkipSelf() private treeViewRef: TrudiDecisionTreeComponent,
+    @SkipSelf() private treeviewDragDropService: DecisionTreeDragDropSerivce
   ) {}
 
   ngOnInit(): void {}
 
-  removeNode(node: TreeNode) {
+  removeNode(node: TreeNodeOptions) {
     this.treeViewRef.removeNode(node);
   }
 
-  addChildNode(node: TreeNode) {
+  addChildNode(node: TreeNodeOptions) {
     console.log(node);
   }
 
-  setNodeDefault(node: TreeNode) {
+  setNodeDefault(node: TreeNodeOptions) {
     this.treeViewRef.setDefaultNode(node);
   }
 
